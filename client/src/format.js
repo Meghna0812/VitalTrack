@@ -1,7 +1,8 @@
 // Small display helpers used across the UI.
 
-const DATE_FMT = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
-const MONTH_FMT = new Intl.DateTimeFormat('en-GB', { month: 'short' });
+// Month names written out by hand: browsers' built-in short names differ ("Sep" vs "Sept"),
+// and the design calls for exactly three letters everywhere, e.g. "21 Dec 2026".
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
 /**
  * MySQL gives us '2026-12-21' (DATE) or '2026-12-21 10:30:00' (TIMESTAMP) as strings.
@@ -17,13 +18,13 @@ export function parseDate(value) {
 /** '2026-12-21' -> '21 Dec 2026' */
 export function formatDate(value) {
   const d = parseDate(value);
-  return d ? DATE_FMT.format(d) : '—';
+  return d ? `${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}` : '—';
 }
 
 /** '2026-12-21' -> 'Dec'  (labels under the mini charts) */
 export function formatMonth(value) {
   const d = parseDate(value);
-  return d ? MONTH_FMT.format(d) : '';
+  return d ? MONTHS[d.getMonth()] : '';
 }
 
 /** Date -> '2026-08-10' in LOCAL time (toISOString() would convert to UTC and can shift the day). */

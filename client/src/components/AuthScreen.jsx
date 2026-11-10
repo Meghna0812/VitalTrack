@@ -46,7 +46,8 @@ export default function AuthScreen({ onSignedIn }) {
       });
       googleButton.current.innerHTML = '';
       window.google.accounts.id.renderButton(googleButton.current, {
-        theme: 'outline', size: 'large', shape: 'pill', width: 320,
+        // Google's button needs a fixed pixel width: fit it to the card (phones are narrower than 320px inside).
+        theme: 'outline', size: 'large', shape: 'pill', width: Math.min(360, googleButton.current.clientWidth || 320),
         text: signup ? 'signup_with' : 'signin_with',
       });
     }).catch((e) => setError(e.message));

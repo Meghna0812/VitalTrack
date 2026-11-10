@@ -379,3 +379,136 @@ tr:last-child td { border-bottom: none; }
   .topbar-right .picker:first-child { flex: 1; }
   .auth-card { padding: 30px 20px 24px; }
 }
+
+/* =====================================================================
+   PHONES & TOUCH SCREENS
+   Everything mobile-specific lives here, at the end of the file, so it
+   overrides the desktop rules above.
+   ===================================================================== */
+
+.google-btn { width: 100%; }   /* so the Google button can measure the space it has */
+
+/* Touch screens have no "hover", so anything that only appears on hover must always be visible. */
+@media (hover: none) {
+  .picker-remove { opacity: 1; }
+  .summary-tile:hover, .continue:not(:disabled):hover { transform: none; }
+}
+
+/* Fingers need bigger targets than a mouse pointer (~44px is the common guideline). */
+@media (pointer: coarse) {
+  button.icon-btn { padding: 11px; }
+  .picker-item, .picker-row .picker-item { padding: 11px 10px; }
+  .chip { padding: 9px 16px; }
+}
+
+@media (max-width: 640px) {
+  .app { padding: 14px 16px 40px; }
+  h2 { font-size: 21px; }
+  h3 { font-size: 15px; }
+
+  /* iPhone Safari zooms into any text box with a font smaller than 16px – prevent that. */
+  input, select, textarea, .name-field input, .field input { font-size: 16px; }
+
+  /* ---- Top bar: [logo ........ avatar] / [Reports | Trends] / [person picker] ----
+     `display: contents` makes the wrapper disappear for layout, so the picker and the
+     avatar can be placed independently in the wrapping row. */
+  .topbar { flex-direction: row; flex-wrap: wrap; align-items: center; gap: 12px; margin-bottom: 18px; }
+  .topbar-right { display: contents; }
+  .topbar .brand { order: 1; flex: 1; font-size: 20px; }
+  .logo { width: 40px; height: 40px; border-radius: 12px; }
+  .topbar .user-menu { order: 2; }
+  /* scoped to .topbar: the sign-in page's toggle uses the same class but must stay in place */
+  .topbar .toggle { order: 3; width: 100%; min-width: 0; }
+  .topbar-right > .picker:not(.user-menu) { order: 4; width: 100%; }
+  .picker-button { width: 100%; }
+  .picker-text strong { max-width: 60vw; }
+  .picker-menu { left: 0; right: 0; width: auto; }
+  .user-menu .picker-menu { left: auto; right: 0; width: min(280px, calc(100vw - 32px)); }
+
+  /* ---- Page headers & period switch ---- */
+  .page-head { flex-direction: column; align-items: stretch; margin-bottom: 14px; }
+  .segmented { width: 100%; }
+  .segmented button { flex: 1; padding: 8px 4px; font-size: 13px; }
+
+  /* ---- Upload ---- */
+  .upload-zone { padding: 16px; gap: 12px; }
+
+  /* ---- Report list rows:  [date ........ actions] / [description + file] / [status · count] ---- */
+  .report-row {
+    grid-template-columns: 1fr auto;
+    grid-template-areas: "date actions" "main main" "meta meta";
+    gap: 6px 12px; padding: 14px 16px;
+  }
+  .date-chip { grid-area: date; }
+  .report-actions { grid-area: actions; }
+  .report-main { grid-area: main; }
+  .report-meta { grid-area: meta; flex-direction: row; align-items: center; gap: 10px; flex-wrap: wrap; }
+
+  /* ---- Trends ---- */
+  .summary { gap: 8px; }
+  .summary-tile { flex: 1; padding: 10px 14px; justify-content: flex-start; align-items: center; text-align: left; }
+  .summary-tile span { line-height: 1.25; }
+  .summary-tile strong { font-size: 21px; }
+  .summary-note { flex-basis: 100%; margin: 2px 0 0; }
+  /* Filter chips: one swipeable row instead of many wrapped lines */
+  .chips {
+    flex-wrap: nowrap; overflow-x: auto; margin: 0 -16px 14px; padding: 2px 16px 4px;
+    scrollbar-width: none; -webkit-overflow-scrolling: touch;
+  }
+  .chips::-webkit-scrollbar { display: none; }
+  .chip { flex-shrink: 0; }
+  .metric-grid { grid-template-columns: 1fr; gap: 12px; }
+  .metric-card { padding: 16px; }
+  .metric-card header { margin-bottom: 10px; }
+  .metric-title { font-size: 15px; }
+  .metric-body { gap: 10px; }
+  .metric-value { flex-shrink: 1; min-width: 0; }
+  .big { font-size: 28px; }
+  .mini-chart { width: 46%; min-width: 0; flex-shrink: 0; }
+
+  /* ---- Report detail: the 5-column table becomes one small card per result ---- */
+  .table-card { padding: 4px 0; overflow: visible; }
+  .results-table thead { display: none; }
+  .results-table, .results-table tbody { display: block; }
+  .results-table tr {
+    display: grid; grid-template-columns: 1fr auto; gap: 4px 12px;
+    padding: 12px 16px; border-bottom: 1px solid var(--border);
+  }
+  .results-table tr:last-child { border-bottom: none; }
+  .results-table td { display: block; padding: 0; border: none; font-size: 14px; }
+  .results-table .cell-test { font-weight: 600; }
+  .results-table .cell-status { grid-column: 2; grid-row: 1; text-align: right; }
+  .results-table td:not(.cell-test):not(.cell-status) { grid-column: 1 / -1; display: flex; justify-content: space-between; gap: 12px; }
+  .results-table td:not(.cell-test):not(.cell-status)::before {
+    content: attr(data-label); color: var(--muted); font-size: 12.5px; font-weight: 500;
+    white-space: nowrap; flex-shrink: 0;   /* the label stays on one line… */
+  }
+  .results-table td:not(.cell-test):not(.cell-status) > * { text-align: right; } /* …and the value wraps instead */
+
+  /* ---- Review panel: form fields stack full width ---- */
+  .review-row { flex-direction: column; gap: 10px; }
+  .review-form { width: 100%; }
+  .review-form select, .review-form input { flex: 1 1 100%; }
+  .review-form button { flex: 1; }
+
+  /* ---- Profile ---- */
+  .profile-head { flex-direction: column; align-items: flex-start; text-align: left; }
+  .profile-stats { width: 100%; }
+  .profile-stats div { flex: 1; }
+  .inline-form input { min-width: 0; flex-basis: 100%; }
+  .inline-form button { flex: 1; }
+
+  /* ---- Sign-in & add-person cards ---- */
+  .auth-page { min-height: 100dvh; padding: 16px; align-items: start; padding-top: 6vh; }
+  .welcome { margin-top: 4vh; padding: 32px 20px 24px; }
+  .welcome form { flex-direction: column; }
+  .continue { width: 100%; justify-content: center; }
+}
+
+/* Very small phones (iPhone SE, older Androids) */
+@media (max-width: 380px) {
+  .toggle button { padding: 9px 10px; font-size: 13.5px; }
+  .mini-chart { width: 42%; }
+  .big { font-size: 25px; }
+  .segmented button { font-size: 12px; }
+}

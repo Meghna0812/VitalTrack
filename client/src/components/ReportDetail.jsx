@@ -43,16 +43,17 @@ export default function ReportDetail({ id, onBack }) {
 
       <h3>Results</h3>
       <div className="card table-card">
-        <table>
+        <table className="results-table">
           <thead><tr><th>Test</th><th>As printed</th><th>Normalized</th><th>Normal range</th><th>Status</th></tr></thead>
           <tbody>
             {trusted.map((r) => (
               <tr key={r.id}>
-                <td>{catalog.find((b) => b.code === r.biomarker_code)?.name ?? r.biomarker_code}</td>
-                <td className="muted">{r.raw_name}: {r.raw_value} {r.raw_unit}</td>
-                <td><strong>{formatValue(r.value)}</strong> {r.unit}</td>
-                <td>{formatRange(r.ref_low, r.ref_high)}</td>
-                <td><span className={`badge ${r.flag}`}>{FLAG_LABEL[r.flag] ?? r.flag}</span></td>
+                {/* data-label: on phones each row becomes a small card and CSS shows these as labels */}
+                <td data-label="Test" className="cell-test">{catalog.find((b) => b.code === r.biomarker_code)?.name ?? r.biomarker_code}</td>
+                <td data-label="As printed" className="muted"><span>{r.raw_name}: {r.raw_value} {r.raw_unit}</span></td>
+                <td data-label="Normalized"><span><strong>{formatValue(r.value)}</strong> {r.unit}</span></td>
+                <td data-label="Normal range"><span>{formatRange(r.ref_low, r.ref_high)}</span></td>
+                <td data-label="Status" className="cell-status"><span className={`badge ${r.flag}`}>{FLAG_LABEL[r.flag] ?? r.flag}</span></td>
               </tr>
             ))}
           </tbody>
