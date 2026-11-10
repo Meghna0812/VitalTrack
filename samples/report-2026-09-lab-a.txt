@@ -1,0 +1,19 @@
+CITYCARE DIAGNOSTICS                                   Ph: +91 98765 43210
+Patient Name: Mr. Arjun Mehta        Age/Sex: 34 Y / M
+UHID: CC-2026-118842                 Ref. By: Dr. Kavita Rao
+Sample Collected: 21/09/2026         Report Date: 22/09/2026
+
+Test Name                     Result      Unit           Reference Range
+Haemoglobin                   13.9        gm/dL          13.0 - 17.0
+Total Leucocyte Count         7400        /cumm          4000 - 11000
+Platelet Count                2.5         lakhs/cumm     1.5 - 4.5
+Glucose (Fasting)             97          mg/dL          70 - 100
+HbA1c                         5.5         %              4.0 - 5.6
+Serum Creatinine              0.95        mg/dL          0.7 - 1.3
+SGPT (ALT)                    41          U/L            < 45
+Total Cholesterol             196         mg/dL          < 200
+LDL Cholesterol               124         mg/dL          < 130
+HDL Cholesterol               45          mg/dL          > 40
+Triglycerides                 146         mg/dL          < 150
+TSH                           2.4         uIU/mL         0.4 - 4.2
+Vitamin D (25-OH)             31          ng/mL          30 - 100

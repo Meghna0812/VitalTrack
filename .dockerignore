@@ -1,0 +1,13 @@
+# Files Docker should NOT copy into the image.
+# node_modules: installed fresh inside the image (for Linux, not your Mac)
+# .env: secrets are passed as environment variables at run time, never baked into an image
+**/node_modules
+**/.env
+**/dist
+server/uploads
+.git
+.DS_Store
+*.md
+samples
+server/test
+server/eval

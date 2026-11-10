@@ -1,0 +1,34 @@
+# Render "Blueprint": describes the infrastructure as code. In Render, choose
+# New → Blueprint, pick this repository, and Render creates everything below.
+# Values marked `sync: false` are secrets: Render asks you to type them in; they are never in git.
+services:
+  - type: web
+    name: vitaltrack
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /api/health      # Render only switches traffic to a new deploy once this answers 200
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: RUN_WORKER                # free plan has no background workers → run it inside the web service
+        value: "true"
+      - key: REDIS_URL
+        fromService:                   # filled in automatically from the Key Value instance below
+          type: keyvalue
+          name: vitaltrack-redis
+          property: connectionString
+      - key: MYSQL_URL                 # from TiDB Cloud: mysql://USER:PASSWORD@HOST:4000/vitaltrack
+        sync: false
+      - key: MYSQL_SSL
+        value: "true"
+      - key: DEEPSEEK_API_KEY
+        sync: false
+      - key: GOOGLE_CLIENT_ID
+        sync: false
+
+  - type: keyvalue                     # Render's managed Redis-compatible store (free: 25 MB)
+    name: vitaltrack-redis
+    plan: free
+    maxmemoryPolicy: noeviction        # BullMQ needs this: never silently drop queue data when full
+    ipAllowList: []                    # empty = reachable only from inside Render, not the internet

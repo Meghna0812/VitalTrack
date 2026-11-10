@@ -1,0 +1,7 @@
+{
+  "reportDate": "2026-09-21",
+  "expected": {
+    "HGB": 13.9, "WBC": 7.4, "PLT": 250, "GLU_F": 97, "HBA1C": 5.5, "CREAT": 0.95, "ALT": 41,
+    "CHOL": 196, "LDL": 124, "HDL": 45, "TRIG": 146, "TSH": 2.4, "VITD": 31
+  }
+}

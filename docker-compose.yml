@@ -1,0 +1,44 @@
+# Run the WHOLE app with Docker on your computer – the same image that gets deployed:
+#
+#   docker compose up --build        then open http://localhost:4000
+#
+# Secrets (DeepSeek key, Google client ID) are read from server/.env.
+# To start only the databases for local development (npm run dev):  docker compose up -d mysql redis
+services:
+  mysql:
+    image: mysql:8.4
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: vitaltrack
+      MYSQL_USER: vitaltrack
+      MYSQL_PASSWORD: vitaltrack
+    ports: ["3306:3306"]
+    volumes:
+      - mysql-data:/var/lib/mysql   # a named volume: data survives `docker compose down`
+    healthcheck:                    # lets the app wait until MySQL actually accepts connections
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-proot"]
+      interval: 5s
+      retries: 20
+
+  redis:
+    image: redis:7.4
+    ports: ["6379:6379"]
+
+  app:
+    build: .
+    env_file: server/.env           # DEEPSEEK_API_KEY, GOOGLE_CLIENT_ID, …
+    environment:
+      # Inside Docker, other containers are reached by their service name, not 127.0.0.1.
+      MYSQL_HOST: mysql
+      REDIS_HOST: redis
+      RUN_WORKER: "true"            # API + worker in one container, exactly like production
+      PORT: "4000"
+      COOKIE_SECURE: "false"        # plain http://localhost has no HTTPS; the real deployment does
+    ports: ["4000:4000"]
+    depends_on:
+      mysql: { condition: service_healthy }
+      redis: { condition: service_started }
+    restart: unless-stopped
+
+volumes:
+  mysql-data:

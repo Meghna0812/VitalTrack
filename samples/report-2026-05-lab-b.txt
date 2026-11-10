@@ -1,0 +1,19 @@
+NORTHGATE PATHOLOGY LABORATORY
+Name: Arjun Mehta    DOB: 04/09/1991    Patient ID: NG-55120
+Referring Doctor: Dr. S. Iyer    Contact: arjun.mehta@example.com
+Collection date: 2026-05-18
+
+Analyte                    Value     Units        Ref. interval
+Hb                         138       g/L          130 - 170
+WBC                        7.1       x10^9/L      4.0 - 11.0
+Platelets                  241       x10^9/L      150 - 400
+Fasting Plasma Glucose     5.1       mmol/L       3.9 - 5.5
+Glycated Haemoglobin       35        mmol/mol     20 - 38
+Creatinine                 84        µmol/L       62 - 106
+ALT                        33        IU/L         0 - 45
+Cholesterol, Total         5.0       mmol/L       < 5.2
+LDL-C                      3.1       mmol/L       < 3.4
+HDL-C                      1.2       mmol/L       > 1.0
+Triglycerides              1.6       mmol/L       < 1.7
+TSH                        2.6       mIU/L        0.4 - 4.0
+25(OH)D                    55        nmol/L       75 - 250

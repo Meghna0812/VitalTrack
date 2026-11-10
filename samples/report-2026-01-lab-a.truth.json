@@ -1,0 +1,8 @@
+{
+  "reportDate": "2026-01-12",
+  "expected": {
+    "HGB": 14.2, "WBC": 7.8, "PLT": 260, "RBC": 4.9, "HCT": 43.1, "MCV": 88, "NEUT": 58, "LYMPH": 33,
+    "GLU_F": 86, "HBA1C": 5.2, "CREAT": 0.9, "ALT": 28, "AST": 24,
+    "CHOL": 182, "LDL": 108, "HDL": 48, "TRIG": 130, "TSH": 2.1, "VITD": 22
+  }
+}
