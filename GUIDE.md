@@ -668,3 +668,28 @@ In Google Cloud → **Clients** → your client → **Authorized JavaScript orig
 - **Your local data stays local.** The deployed app starts with an empty database. (It could be copied over with `mysqldump`, but test data usually isn't worth moving.)
 - **TiDB is MySQL-*compatible*, not MySQL.** The schema avoids the known differences, but test it after the first deploy. If anything misbehaves, a real MySQL host (Railway, or Aiven's paid tier) works without code changes; just change `MYSQL_URL`.
 - **Scaling story:** for real traffic, run the worker as its own service (`RUN_WORKER=false` on the web service, plus a second service with `npm run worker`), store uploads in S3/R2 instead of local disk, and use a persistent Redis.
+
+---
+
+## Part 13: Making it work on phones (responsive design)
+
+**Responsive** means one website that adapts its layout to the screen size, instead of a separate mobile site. It's done with CSS **media queries**: rules that only apply under certain conditions. All phone rules live in one block at the **end** of [styles.css](client/src/styles.css). Rules later in a file win when two rules conflict, so the desktop design stays untouched.
+
+| Media query | Applies to | What it fixes |
+|---|---|---|
+| `@media (max-width: 640px)` | Phones | The layout changes described below |
+| `@media (max-width: 380px)` | Very small phones (iPhone SE) | Slightly smaller text and charts |
+| `@media (hover: none)` | Touch screens | Things that only appeared on mouse hover (the remove-person trash icon) are always visible, because fingers can't hover |
+| `@media (pointer: coarse)` | Touch screens | Bigger tap targets (about 44px, the common guideline for fingers) |
+
+**What changes on a phone:**
+- **Top bar:** logo + avatar on the first row, then a full-width Reports/Trends toggle, then the person picker. The trick is `display: contents` on the wrapper, which makes the wrapper "disappear" for layout so its children can be reordered with `order`.
+- **Report list:** each row uses `grid-template-areas` ("date actions" / "main main" / "meta meta") so nothing gets squeezed.
+- **Results table → cards:** a 5-column table can't fit 360px. On phones the `<thead>` is hidden, each `<tr>` becomes a small card, and each cell shows its column name from a `data-label` attribute via CSS `content: attr(data-label)`. No JavaScript is needed.
+- **Filter chips:** one horizontally swipeable row instead of four wrapped lines.
+- **Text boxes are 16px:** iPhone Safari automatically zooms into any input with a smaller font, which feels broken. 16px prevents it.
+- **Google button:** Google's button needs a fixed pixel width, so it's now measured from the card's actual width.
+
+**How it was checked:** with screenshots at 390px (iPhone 14) and 360px (small Android/iPhone SE), using headless Chrome, plus an automatic check that no page scrolls sideways. The screenshots caught two bugs that reading the code didn't: a CSS rule that accidentally moved the sign-in toggle to the bottom (fixed by scoping it to `.topbar .toggle`), and a number and its unit pushed apart in the results cards.
+
+**Dates:** month names are now written out in [format.js](client/src/format.js). Browsers' built-in formatter recently changed "Sep" to "Sept", which broke the "21 Sep 2026" format.
