@@ -16,4 +16,18 @@ export const reportQueue = new Queue(QUEUE_NAME, {
 });
 
 // Only the report ID goes into Redis – never the report text or patient details.
-export const enqueueReport = (reportId) => reportQueue.add('extract', { reportId }, { jobId: `report-${reportId}` });
+//
+// jobId = `report-<id>` prevents the same report being queued twice. But BullMQ also
+// silently ignores add() while an OLD finished/failed job with that ID is still stored,
+// which would leave a re-queued report stuck on "queued" forever. So a finished or failed
+// leftover is removed first; a job that is still waiting or running is left alone.
+export async function enqueueReport(reportId) {
+  const jobId = `report-${reportId}`;
+  const existing = await reportQueue.getJob(jobId);
+  if (existing) {
+    const state = await existing.getState();
+    if (state !== 'completed' && state !== 'failed') return existing; // already queued or running
+    await existing.remove();
+  }
+  return reportQueue.add('extract', { reportId }, { jobId });
+}

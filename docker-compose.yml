@@ -29,7 +29,15 @@ services:
     env_file: server/.env           # DEEPSEEK_API_KEY, GOOGLE_CLIENT_ID, …
     environment:
       # Inside Docker, other containers are reached by their service name, not 127.0.0.1.
+      # All database settings are set here, so whatever is in server/.env (e.g. TiDB) is ignored.
+      MYSQL_URL: ""
       MYSQL_HOST: mysql
+      MYSQL_PORT: "3306"
+      MYSQL_USER: vitaltrack
+      MYSQL_PASSWORD: vitaltrack
+      MYSQL_DATABASE: vitaltrack
+      MYSQL_SSL: "false"
+      REDIS_URL: ""
       REDIS_HOST: redis
       RUN_WORKER: "true"            # API + worker in one container, exactly like production
       PORT: "4000"

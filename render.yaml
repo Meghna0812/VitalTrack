@@ -6,6 +6,7 @@ services:
     name: vitaltrack
     runtime: docker
     plan: free
+    region: singapore                # same region as the TiDB database (ap-southeast-1) = fast queries
     dockerfilePath: ./Dockerfile
     healthCheckPath: /api/health      # Render only switches traffic to a new deploy once this answers 200
     envVars:
@@ -18,9 +19,18 @@ services:
           type: keyvalue
           name: vitaltrack-redis
           property: connectionString
-      - key: MYSQL_URL                 # from TiDB Cloud: mysql://USER:PASSWORD@HOST:4000/vitaltrack
+      # TiDB Cloud connection – the same values as in your server/.env (TiDB → Connect)
+      - key: MYSQL_HOST                # e.g. gateway01.us-west-2.prod.aws.tidbcloud.com
         sync: false
-      - key: MYSQL_SSL
+      - key: MYSQL_USER                # the FULL user incl. prefix, e.g. 3xAbCdEf123.root
+        sync: false
+      - key: MYSQL_PASSWORD
+        sync: false
+      - key: MYSQL_PORT
+        value: "4000"
+      - key: MYSQL_DATABASE
+        value: vitaltrack
+      - key: MYSQL_SSL                 # TiDB only accepts encrypted connections
         value: "true"
       - key: DEEPSEEK_API_KEY
         sync: false
@@ -30,5 +40,6 @@ services:
   - type: keyvalue                     # Render's managed Redis-compatible store (free: 25 MB)
     name: vitaltrack-redis
     plan: free
+    region: singapore                # must be in the same region as the web service
     maxmemoryPolicy: noeviction        # BullMQ needs this: never silently drop queue data when full
     ipAllowList: []                    # empty = reachable only from inside Render, not the internet

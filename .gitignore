@@ -4,3 +4,4 @@ server/uploads/
 client/dist/
 .DS_Store
 server/public/
+.vscode/
